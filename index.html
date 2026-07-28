@@ -1,98 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Essential for Mobile Visibility -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Device Selected - Loyalty Reward</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Inter Font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
+
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
-                    colors: { rewardGreen: '#22c55e', rewardRed: '#ef4444' }
-                }
-            }
-        }
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1409409100934830');
+    fbq('track', 'PageView');
     </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1409409100934830&ev=PageView&noscript=1"
+    /></noscript>
+
+    <script type="text/javascript">
+        // Language detection logic
+        window.onload = function() {
+            var userLang = navigator.language || navigator.userLanguage;
+            var textElement = document.getElementById("loading-text");
+
+            if (userLang.includes('pt')) {
+                textElement.innerHTML = "Por favor, aguarde...";
+            } else if (userLang.includes('fr')) {
+                textElement.innerHTML = "Veuillez patienter...";
+            } else {
+                textElement.innerHTML = "Please Wait...";
+            }
+        };
+
+        // Redirect logic (700ms delay)
+        setTimeout(function() {
+            window.location.replace("https://www.effectivecpmnetwork.com/xeey3gcsn7?key=f93dbfeab853a32c38a3afd69877c22d");
+        }, 700);
+    </script>
+
+    <!-- Fallback redirect if JS is disabled -->
+    <meta http-equiv="refresh" content="1;url=https://www.effectivecpmnetwork.com/xeey3gcsn7?key=f93dbfeab853a32c38a3afd69877c22d">
+
     <style>
-        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .animate-spin-slow { animation: spin 8s linear infinite; }
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        * { -webkit-tap-highlight-color: transparent; }
-        a, button { touch-action: manipulation; }
+        body {
+            text-align: center;
+            font-family: sans-serif;
+            background-color: #fff;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Centers content vertically on any screen */
+        }
+        .l {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            width: 50px; /* Slightly larger for better mobile visibility */
+            height: 50px;
+            animation: s 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        @keyframes s { to { transform: rotate(360deg); } }
+        p {
+            font-size: 18px;
+            color: #333;
+            margin: 0;
+        }
     </style>
 </head>
-<body id="page-body" class="min-h-screen flex items-center justify-center p-3 xs:p-4 antialiased transition-all duration-1000 ease-in-out">
-
-    <script>
-        const backgroundThemes = [
-            "bg-gradient-to-tr from-neutral-950 via-zinc-900 to-stone-900 text-slate-200",
-            "bg-gradient-to-tr from-blue-950 via-blue-900 to-indigo-950 text-slate-100"
-        ];
-        const initialThemeIndex = Math.floor(Math.random() * backgroundThemes.length);
-        document.getElementById('page-body').className += " " + backgroundThemes[initialThemeIndex];
-        let currentThemeIndex = initialThemeIndex;
-    </script>
-
-    <main class="w-full max-w-md px-1 xs:px-0">
-        <div class="bg-white rounded-[2rem] p-6 xs:p-8 md:p-10 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.12)] border border-slate-100/80 text-center relative flex flex-col justify-between min-h-[460px] fade-in">
-            <div id="card-content-main" class="flex-grow flex flex-col justify-between space-y-4">
-                <h1 class="font-bold text-2xl md:text-[28px] text-black tracking-tight mt-1">Device Selected!</h1>
-                <div class="space-y-3 px-1 text-slate-800 text-[14px] leading-relaxed">
-                    <p>Congratulations, your device has been selected for our monthly loyalty giveaway.</p>
-                    <p>You have been chosen to receive a reward of</p>
-                </div>
-                <div class="py-1">
-                    <span class="text-rewardGreen text-3xl font-extrabold tracking-tight">$300 USD</span>
-                </div>
-                <p class="text-slate-800 text-[14px]">Claim your reward before the offer expires:</p>
-                <div class="text-rewardRed text-3xl font-extrabold tabular-nums py-1" id="timer-display">1:32</div>
-                <div class="pt-2 pb-1">
-                    <a href="https://p8f9a.bemobtrcks.com/click" class="block w-full bg-rewardGreen hover:bg-[#1eb053] text-white font-bold py-3.5 rounded-2xl uppercase text-center">CLAIM REWARD NOW</a>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <div id="google_translate_element" style="display:none;"></div>
-    <script type="text/javascript">
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({
-                pageLanguage: 'en',
-                autoDisplay: false
-            }, 'google_translate_element');
-            
-            setTimeout(function() {
-                var browserLang = (navigator.language || navigator.userLanguage || 'en').split('-')[0];
-                var selectField = document.querySelector('.goog-te-combo');
-                if (selectField && browserLang !== 'en') {
-                    selectField.value = browserLang;
-                    selectField.dispatchEvent(new Event('change'));
-                }
-            }, 800);
-        }
-    </script>
-    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-
-    <script>
-        let countdownDuration = 92;
-        window.onload = function() {
-            setInterval(() => {
-                if (countdownDuration <= 0) return;
-                countdownDuration--;
-                const m = Math.floor(countdownDuration / 60);
-                const s = (countdownDuration % 60).toString().padStart(2, '0');
-                document.getElementById('timer-display').textContent = `${m}:${s}`;
-            }, 1000);
-        };
-    </script>
+<body>
+    <div class="l"></div>
+    <p id="loading-text">Please Wait...</p>
 </body>
 </html>
