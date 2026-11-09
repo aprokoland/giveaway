@@ -1,0 +1,409 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Continue</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800&display=swap">
+
+<style>
+  :root {
+    --card-bg: rgba(255,255,255,0.97);
+    --fg: #0d0d12;
+    --fg-sub: #5a5a72;
+    --btn-back-bg: #ebebf0;
+    --btn-back-fg: #0d0d12;
+    --btn-continue-bg: #e8194b;
+    --btn-continue-fg: #ffffff;
+    --card-radius: 20px;
+    --btn-radius: 14px;
+    color-scheme: light;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body { width: 100%; height: 100%; }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter', system-ui, sans-serif;
+    overflow: hidden;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: max(24px, env(safe-area-inset-top, 0px)) max(24px, env(safe-area-inset-bottom, 0px));
+  }
+
+  /* ── Animated canvas background ── */
+  #bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+  }
+
+  /* ── Card ── */
+  .card {
+    position: relative;
+    z-index: 1;
+    background: var(--card-bg);
+    border: 1px solid rgba(255,255,255,0.6);
+    border-radius: var(--card-radius);
+    box-shadow:
+      0 2px 0 rgba(255,255,255,0.5) inset,
+      0 24px 64px rgba(0,0,0,0.38),
+      0 2px 8px rgba(0,0,0,0.18);
+    padding: 40px 32px 32px;
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* Play icon badge */
+  .play-badge {
+    width: 56px;
+    height: 56px;
+    background: #e8194b;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 6px;
+    box-shadow: 0 4px 18px rgba(232,25,75,0.45);
+  }
+  .play-badge svg { margin-left: 3px; }
+
+  .card-title {
+    font-size: 21px;
+    font-weight: 800;
+    line-height: 1.25;
+    color: var(--fg);
+    text-wrap: balance;
+    letter-spacing: -0.3px;
+  }
+
+  .card-sub {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--fg-sub);
+    line-height: 1.55;
+    text-wrap: balance;
+    margin-bottom: 6px;
+  }
+
+  .btn-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 6px;
+  }
+
+  .btn {
+    flex: 1;
+    padding: 15px 12px;
+    border: none;
+    border-radius: var(--btn-radius);
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.14s, transform 0.1s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    letter-spacing: 0.01em;
+  }
+  .btn:active { transform: scale(0.96); }
+  .btn-back  { background: var(--btn-back-bg);     color: var(--btn-back-fg); }
+  .btn-continue { background: var(--btn-continue-bg); color: var(--btn-continue-fg);
+                  box-shadow: 0 4px 16px rgba(232,25,75,0.4); }
+  .btn-back:hover     { opacity: 0.75; }
+  .btn-continue:hover { opacity: 0.88; }
+
+  /* Toggle row */
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 10px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(0,0,0,0.07);
+  }
+  .toggle-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--fg-sub);
+    user-select: none;
+    cursor: pointer;
+  }
+  /* pill switch */
+  .switch { position: relative; width: 36px; height: 20px; cursor: pointer; }
+  .switch input { opacity: 0; width: 0; height: 0; position: absolute; }
+  .switch-track {
+    position: absolute; inset: 0;
+    background: #ccc;
+    border-radius: 20px;
+    transition: background 0.2s;
+  }
+  .switch input:checked + .switch-track { background: #e8194b; }
+  .switch-thumb {
+    position: absolute;
+    top: 2px; left: 2px;
+    width: 16px; height: 16px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+    transition: transform 0.2s;
+    pointer-events: none;
+  }
+  .switch input:checked ~ .switch-thumb { transform: translateX(16px); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn { transition: none; }
+    .btn:active { transform: none; }
+  }
+</style>
+
+<canvas id="bg"></canvas>
+
+<div class="card" role="dialog" aria-labelledby="dlg-title" aria-describedby="dlg-sub">
+  <div class="play-badge" aria-hidden="true">
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+      <polygon points="7,4 19,11 7,18" fill="white"/>
+    </svg>
+  </div>
+  <h1 class="card-title" id="dlg-title">Continue to the next page?</h1>
+  <p class="card-sub" id="dlg-sub">Redirecting in <strong id="countdown">3</strong>s &mdash; or click below.</p>
+  <p class="card-sub" id="dlg-sub-off" style="display:none">Click Continue whenever you&rsquo;re ready.</p>
+  <div class="btn-row">
+    <button class="btn btn-back" onclick="history.back()">Back</button>
+    <a class="btn btn-continue" id="continue-btn" href="https://www.google.com">Continue</a>
+  </div>
+  <div class="toggle-row">
+    <label class="toggle-label" for="redirect-toggle">Auto-redirect</label>
+    <label class="switch">
+      <input type="checkbox" id="redirect-toggle" checked onchange="toggleRedirect(this.checked)">
+      <span class="switch-track"></span>
+      <span class="switch-thumb"></span>
+    </label>
+  </div>
+</div>
+
+<script>
+  // Animated particle background
+  const canvas = document.getElementById('bg');
+  const ctx = canvas.getContext('2d');
+
+  // Deep dark-rose gradient palette
+  const C1 = '#120818'; // deep purple-black
+  const C2 = '#3a0a22'; // dark crimson
+  const C3 = '#6b0f35'; // wine
+  const ACCENT = '#e8194b';
+
+  let W, H, particles;
+
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+    buildGradient();
+  }
+
+  function buildGradient() {
+    const g = ctx.createRadialGradient(W*0.35, H*0.35, 0, W*0.5, H*0.5, Math.max(W,H)*0.85);
+    g.addColorStop(0,   C3);
+    g.addColorStop(0.4, C2);
+    g.addColorStop(1,   C1);
+    canvas._grad = g;
+  }
+
+  function initParticles(n) {
+    particles = Array.from({length: n}, () => ({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: Math.random() * 1.8 + 0.4,
+      a: Math.random() * Math.PI * 2,
+      speed: Math.random() * 0.3 + 0.08,
+      opacity: Math.random() * 0.5 + 0.15,
+    }));
+  }
+
+  // Draw a stylised fashion-silhouette figure
+  function drawFigure(x, y, scale, alpha) {
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.translate(x, y);
+    ctx.scale(scale, scale);
+
+    const fill = (color) => { ctx.fillStyle = color; ctx.fill(); };
+
+    // ── Hair (long, flowing) ──
+    ctx.beginPath();
+    ctx.ellipse(0, -148, 28, 32, 0, 0, Math.PI*2);
+    fill('rgba(255,180,210,0.55)');
+    // hair flowing right
+    ctx.beginPath();
+    ctx.moveTo(-8, -130);
+    ctx.bezierCurveTo(40, -100, 55, -40, 42, 20);
+    ctx.bezierCurveTo(38, 40, 20, 50, 15, 60);
+    ctx.bezierCurveTo(5, 50, 0, 20, -5, -10);
+    ctx.bezierCurveTo(-2, -60, -10, -110, -8, -130);
+    fill('rgba(255,160,200,0.45)');
+    // hair left side
+    ctx.beginPath();
+    ctx.moveTo(8, -130);
+    ctx.bezierCurveTo(-38, -100, -50, -30, -38, 30);
+    ctx.bezierCurveTo(-28, 55, -10, 60, -5, 60);
+    ctx.bezierCurveTo(-15, 40, -20, 10, -10, -20);
+    ctx.bezierCurveTo(-5, -70, 5, -110, 8, -130);
+    fill('rgba(255,140,185,0.4)');
+
+    // ── Head ──
+    ctx.beginPath();
+    ctx.ellipse(0, -148, 22, 26, 0, 0, Math.PI*2);
+    fill('rgba(255,200,210,0.65)');
+
+    // ── Neck ──
+    ctx.beginPath();
+    ctx.rect(-7, -122, 14, 20);
+    fill('rgba(255,190,205,0.55)');
+
+    // ── Dress / body (elegant A-line) ──
+    ctx.beginPath();
+    ctx.moveTo(-18, -102);
+    ctx.bezierCurveTo(-22, -70, -25, -30, -20, 0);
+    ctx.bezierCurveTo(-15, 30, -10, 60, -8, 80);
+    // hem
+    ctx.bezierCurveTo(-4, 95, 4, 95, 8, 80);
+    ctx.bezierCurveTo(10, 60, 15, 30, 20, 0);
+    ctx.bezierCurveTo(25, -30, 22, -70, 18, -102);
+    ctx.closePath();
+    fill('rgba(255,80,140,0.45)');
+
+    // ── Waist highlight ──
+    ctx.beginPath();
+    ctx.ellipse(0, -20, 12, 18, 0, 0, Math.PI*2);
+    fill('rgba(255,120,160,0.2)');
+
+    // ── Left arm ──
+    ctx.beginPath();
+    ctx.moveTo(-18, -95);
+    ctx.bezierCurveTo(-35, -75, -42, -40, -38, 10);
+    ctx.bezierCurveTo(-36, 20, -30, 22, -28, 12);
+    ctx.bezierCurveTo(-30, -35, -24, -68, -12, -88);
+    ctx.closePath();
+    fill('rgba(255,185,205,0.5)');
+
+    // ── Right arm ──
+    ctx.beginPath();
+    ctx.moveTo(18, -95);
+    ctx.bezierCurveTo(35, -75, 42, -40, 38, 10);
+    ctx.bezierCurveTo(36, 20, 30, 22, 28, 12);
+    ctx.bezierCurveTo(30, -35, 24, -68, 12, -88);
+    ctx.closePath();
+    fill('rgba(255,185,205,0.5)');
+
+    // ── Legs ──
+    // left leg
+    ctx.beginPath();
+    ctx.moveTo(-8, 80);
+    ctx.bezierCurveTo(-10, 110, -12, 160, -10, 200);
+    ctx.bezierCurveTo(-8, 210, -2, 212, 0, 205);
+    ctx.bezierCurveTo(0, 165, -2, 115, 0, 80);
+    ctx.closePath();
+    fill('rgba(255,185,205,0.5)');
+    // right leg
+    ctx.beginPath();
+    ctx.moveTo(8, 80);
+    ctx.bezierCurveTo(10, 110, 12, 160, 10, 200);
+    ctx.bezierCurveTo(8, 210, 2, 212, 0, 205);
+    ctx.bezierCurveTo(0, 165, 2, 115, 0, 80);
+    ctx.closePath();
+    fill('rgba(255,180,200,0.5)');
+
+    // ── Shoes ──
+    ctx.beginPath();
+    ctx.ellipse(-6, 208, 8, 5, -0.2, 0, Math.PI*2);
+    fill('rgba(200,50,100,0.6)');
+    ctx.beginPath();
+    ctx.ellipse(6, 208, 8, 5, 0.2, 0, Math.PI*2);
+    fill('rgba(200,50,100,0.6)');
+
+    ctx.restore();
+  }
+
+  function draw(ts) {
+    ctx.fillStyle = canvas._grad || C1;
+    ctx.fillRect(0, 0, W, H);
+
+    // Soft glow blobs
+    [[W*0.2,H*0.25,220,'rgba(180,20,70,0.18)'],[W*0.78,H*0.65,180,'rgba(100,10,50,0.22)']]
+      .forEach(([bx,by,br,bc]) => {
+        const bg = ctx.createRadialGradient(bx,by,0,bx,by,br);
+        bg.addColorStop(0, bc); bg.addColorStop(1,'transparent');
+        ctx.fillStyle = bg; ctx.fillRect(0,0,W,H);
+      });
+
+    // Female figures — left side large, right side smaller
+    const sc = Math.min(W, H) / 520;
+    drawFigure(W * 0.12, H * 0.82, sc * 1.0, 0.55);
+    drawFigure(W * 0.88, H * 0.80, sc * 0.85, 0.42);
+    // faint center one behind card
+    drawFigure(W * 0.5, H * 0.78, sc * 1.1, 0.12);
+
+    // Particles
+    particles.forEach(p => {
+      p.a += p.speed * 0.012;
+      p.x += Math.cos(p.a) * p.speed;
+      p.y += Math.sin(p.a) * p.speed * 0.6;
+      if (p.x < -4) p.x = W+4;
+      if (p.x > W+4) p.x = -4;
+      if (p.y < -4) p.y = H+4;
+      if (p.y > H+4) p.y = -4;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+      ctx.fillStyle = `rgba(255,120,160,${p.opacity})`;
+      ctx.fill();
+    });
+
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', () => { resize(); initParticles(particles.length); });
+  resize();
+  initParticles(120);
+  requestAnimationFrame(draw);
+
+  // 3-second auto-redirect
+  const DEST = 'https://www.google.com';
+  let secs = 3;
+  let redirectEnabled = true;
+  const countEl = document.getElementById('countdown');
+  const subOn  = document.getElementById('dlg-sub');
+  const subOff = document.getElementById('dlg-sub-off');
+
+  const timer = setInterval(() => {
+    if (!redirectEnabled) return;
+    secs--;
+    if (secs > 0) {
+      countEl.textContent = secs;
+    } else {
+      clearInterval(timer);
+      window.location.href = DEST;
+    }
+  }, 1000);
+
+  function toggleRedirect(on) {
+    redirectEnabled = on;
+    subOn.style.display  = on  ? '' : 'none';
+    subOff.style.display = on  ? 'none' : '';
+    if (on) {
+      // reset countdown
+      secs = 3;
+      countEl.textContent = secs;
+    }
+  }
+</script>
+
+</body></html>
